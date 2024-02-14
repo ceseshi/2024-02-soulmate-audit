@@ -15,6 +15,7 @@ contract Soulmate is ERC721 {
     error Soulmate__SoulboundTokenCannotBeTransfered();
     error Soulmate__alreadyMinting();
     error Soulmate__noSoulmate();
+    error Soulmate__alreadyDivorced();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
@@ -125,9 +126,10 @@ contract Soulmate is ERC721 {
     }
 
     /// @notice Cancel possibily for 2 lovers to collect LoveToken from the airdrop.
-    // @audit should check if soulmate exists
     function getDivorced() public {
         address soulmate2 = soulmateOf[msg.sender];
+        if(soulmate2 == address(0)) revert Soulmate__noSoulmate();
+        if(divorced[msg.sender]) revert Soulmate__alreadyDivorced();
         divorced[msg.sender] = true;
         divorced[soulmateOf[msg.sender]] = true;
         emit CoupleHasDivorced(msg.sender, soulmate2);
