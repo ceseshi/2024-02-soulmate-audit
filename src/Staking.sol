@@ -13,6 +13,7 @@ contract Staking {
     //////////////////////////////////////////////////////////////*/
     error Staking__NoMoreRewards();
     error Staking__StakingPeriodTooShort();
+    error Staking__NoSoulmate();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
@@ -68,6 +69,8 @@ contract Staking {
     /// @notice Claim rewards for staking.
     /// @notice Users can claim 1 token per staking token per week.
     function claimRewards() public {
+        if (soulmateContract.soulmateOf(msg.sender) == address(0)) revert Staking__NoSoulmate();
+
         uint256 soulmateId = soulmateContract.ownerToId(msg.sender);
         // first claim
         if (lastClaim[msg.sender] == 0) {
@@ -78,7 +81,6 @@ contract Staking {
 
         // How many weeks passed since the last claim.
         // Thanks to round-down division, it will be the lower amount possible until a week has completly pass.
-        // @audit if no soulmate, timeInWeeksSinceLastClaim = block.timestamp / 1 weeks
         uint256 timeInWeeksSinceLastClaim = ((block.timestamp -
             lastClaim[msg.sender]) / 1 weeks);
 
