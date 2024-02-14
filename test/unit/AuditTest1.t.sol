@@ -87,7 +87,7 @@ contract AuditTest1 is BaseTest {
 
         vm.startPrank(alice);
         soulmateContract.getDivorced();
-        bool isDivorced = soulmateContract.isDivorced();
+        bool isDivorced = soulmateContract.isDivorced(alice);
         assertTrue(isDivorced);
     }
 

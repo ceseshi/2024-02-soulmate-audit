@@ -131,9 +131,8 @@ contract Soulmate is ERC721 {
         emit CoupleHasDivorced(msg.sender, soulmate2);
     }
 
-    // @audit should pass address
-    function isDivorced() public view returns (bool) {
-        return divorced[msg.sender];
+    function isDivorced(address soulmate) public view returns (bool) {
+        return divorced[soulmate];
     }
 
     function totalSupply() external view returns (uint256) {

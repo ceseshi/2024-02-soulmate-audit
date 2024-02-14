@@ -25,7 +25,7 @@ interface ISoulmate {
 
     function getDivorced() external;
 
-    function isDivorced() external view returns (bool);
+    function isDivorced(address) external view returns (bool);
 
     function totalSupply() external view returns (uint256);
 
