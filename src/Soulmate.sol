@@ -14,6 +14,7 @@ contract Soulmate is ERC721 {
     error Soulmate__alreadyHaveASoulmate(address soulmate);
     error Soulmate__SoulboundTokenCannotBeTransfered();
     error Soulmate__alreadyMinting();
+    error Soulmate__noSoulmate();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
@@ -105,8 +106,8 @@ contract Soulmate is ERC721 {
 
     /// @notice Allows any soulmates with the same NFT ID to write in a shared space on blockchain.
     /// @param message The message to write in the shared space.
-    // @audit any user can write
     function writeMessageInSharedSpace(string calldata message) external {
+        if(soulmateOf[msg.sender] == address(0)) revert Soulmate__noSoulmate();
         uint256 id = ownerToId[msg.sender];
         sharedSpace[id] = message;
         emit MessageWrittenInSharedSpace(id, message);
