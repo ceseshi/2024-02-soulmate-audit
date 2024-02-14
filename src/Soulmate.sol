@@ -13,6 +13,7 @@ contract Soulmate is ERC721 {
 
     error Soulmate__alreadyHaveASoulmate(address soulmate);
     error Soulmate__SoulboundTokenCannotBeTransfered();
+    error Soulmate__alreadyMinting();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
@@ -71,8 +72,8 @@ contract Soulmate is ERC721 {
             idToOwners[nextID][0] = msg.sender;
             ownerToId[msg.sender] = nextID;
             emit SoulmateIsWaiting(msg.sender);
-        // @audit should check if soulmate1 is the sender
         } else if (soulmate2 == address(0)) {
+            if(soulmate1 == msg.sender) revert Soulmate__alreadyMinting();
             idToOwners[nextID][1] = msg.sender;
             // Once 2 soulmates are reunited, the token is minted
             ownerToId[msg.sender] = nextID;
