@@ -13,6 +13,7 @@ contract Airdrop {
     //////////////////////////////////////////////////////////////*/
     error Airdrop__CoupleIsDivorced();
     error Airdrop__PreviousTokenAlreadyClaimed();
+    error Airdrop__NoSoulmate();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
@@ -50,11 +51,10 @@ contract Airdrop {
     /// @notice Claim tokens. Every person who have a Soulmate NFT token can claim 1 LoveToken per day.
     function claim() public {
         // No LoveToken for people who don't love their soulmates anymore.
-        /// @audit isDivorced always returns false
+        if (soulmateContract.soulmateOf(msg.sender) == address(0)) revert Airdrop__NoSoulmate();
         if (soulmateContract.isDivorced()) revert Airdrop__CoupleIsDivorced();
 
         // Calculating since how long soulmates are reunited
-        // @audit if sender has no soulmate, numberOfDaysInCouple = block.timestamp / 1 days
         uint256 numberOfDaysInCouple = (block.timestamp -
             soulmateContract.idToCreationTimestamp(
                 soulmateContract.ownerToId(msg.sender)
