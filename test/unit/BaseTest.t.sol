@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.23;
 
-import {Test, console2} from "forge-std/Test.sol";
+import {Test, Vm, console2} from "forge-std/Test.sol";
 
 import {IVault} from "../../src/interface/IVault.sol";
 import {ISoulmate} from "../../src/interface/ISoulmate.sol";
@@ -26,7 +26,7 @@ contract BaseTest is Test {
     address soulmate1 = makeAddr("soulmate1");
     address soulmate2 = makeAddr("soulmate2");
 
-    function setUp() public {
+    function setUp() public virtual {
         vm.startPrank(deployer);
         airdropVault = new Vault();
         stakingVault = new Vault();

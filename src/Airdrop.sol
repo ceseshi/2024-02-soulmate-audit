@@ -24,7 +24,7 @@ contract Airdrop {
     ISoulmate public immutable soulmateContract;
     IVault public immutable airdropVault;
 
-    mapping(address owner => uint256 alreadyClaimed) private _claimedBy;
+    mapping(address owner => uint256 alreadyClaimed) public _claimedBy;
 
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
