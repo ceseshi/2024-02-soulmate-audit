@@ -11,20 +11,27 @@ contract Vault {
                                 ERRORS
     //////////////////////////////////////////////////////////////*/
     error Vault__AlreadyInitialized();
+    error Vault__NotTheOwner();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
     //////////////////////////////////////////////////////////////*/
+    address public owner;
     bool public vaultInitialize;
 
     /*//////////////////////////////////////////////////////////////
                                FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
+    constructor() {
+        owner = msg.sender;
+    }
+
     /// @notice Init vault with the loveToken.
     /// @notice Vault will approve its corresponding management contract to handle tokens.
     /// @notice vaultInitialize protect against multiple initialization.
     function initVault(ILoveToken loveToken, address managerContract) public {
+        if (msg.sender != owner) revert Vault__NotTheOwner();
         if (vaultInitialize) revert Vault__AlreadyInitialized();
         loveToken.initVault(managerContract);
         vaultInitialize = true;
