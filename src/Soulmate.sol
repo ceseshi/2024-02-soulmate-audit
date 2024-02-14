@@ -71,6 +71,7 @@ contract Soulmate is ERC721 {
             idToOwners[nextID][0] = msg.sender;
             ownerToId[msg.sender] = nextID;
             emit SoulmateIsWaiting(msg.sender);
+        // @audit should check if soulmate1 is the sender
         } else if (soulmate2 == address(0)) {
             idToOwners[nextID][1] = msg.sender;
             // Once 2 soulmates are reunited, the token is minted
@@ -103,6 +104,7 @@ contract Soulmate is ERC721 {
 
     /// @notice Allows any soulmates with the same NFT ID to write in a shared space on blockchain.
     /// @param message The message to write in the shared space.
+    // @audit any user can write
     function writeMessageInSharedSpace(string calldata message) external {
         uint256 id = ownerToId[msg.sender];
         sharedSpace[id] = message;
@@ -121,6 +123,7 @@ contract Soulmate is ERC721 {
     }
 
     /// @notice Cancel possibily for 2 lovers to collect LoveToken from the airdrop.
+    // @audit should check if soulmate exists
     function getDivorced() public {
         address soulmate2 = soulmateOf[msg.sender];
         divorced[msg.sender] = true;
@@ -128,6 +131,7 @@ contract Soulmate is ERC721 {
         emit CoupleHasDivorced(msg.sender, soulmate2);
     }
 
+    // @audit should pass address
     function isDivorced() public view returns (bool) {
         return divorced[msg.sender];
     }

@@ -78,6 +78,7 @@ contract Staking {
 
         // How many weeks passed since the last claim.
         // Thanks to round-down division, it will be the lower amount possible until a week has completly pass.
+        // @audit if no soulmate, timeInWeeksSinceLastClaim = block.timestamp / 1 weeks
         uint256 timeInWeeksSinceLastClaim = ((block.timestamp -
             lastClaim[msg.sender]) / 1 weeks);
 
