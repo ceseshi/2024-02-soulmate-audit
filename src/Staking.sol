@@ -53,7 +53,7 @@ contract Staking {
             revert Staking__NoMoreRewards();
         // No require needed because of overflow protection
         userStakes[msg.sender] += amount;
-        loveToken.transferFrom(msg.sender, address(this), amount);
+        loveToken.transferFrom(msg.sender, address(stakingVault), amount);
 
         emit Deposited(msg.sender, amount);
     }
@@ -62,7 +62,7 @@ contract Staking {
     function withdraw(uint256 amount) public {
         // No require needed because of overflow protection
         userStakes[msg.sender] -= amount;
-        loveToken.transfer(msg.sender, amount);
+        loveToken.transferFrom(address(stakingVault), msg.sender, amount);
         emit Withdrew(msg.sender, amount);
     }
 
