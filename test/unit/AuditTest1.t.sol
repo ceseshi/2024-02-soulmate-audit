@@ -62,6 +62,35 @@ contract AuditTest1 is BaseTest {
         console2.log("balance", loveToken.balanceOf(alice));
     }
 
+    function testClaimRewardsDivorced() public {
+
+        vm.mockCallRevert(makeAddr("alices"), "", abi.encode("TRANSFER_FAILED"));
+        makeAddr("alice").call{value:1}("");
+        return;
+
+
+        _mintOneTokenForBothSoulmates();
+
+        // Deposit and claim
+        vm.startPrank(soulmate1);
+        vm.warp(block.timestamp + 10 days);
+        airdropContract.claim();
+        uint256 initialBalance = loveToken.balanceOf(soulmate1);
+        loveToken.approve(address(stakingContract), initialBalance);
+        stakingContract.deposit(loveToken.balanceOf(soulmate1));
+
+        // Get divorced
+        soulmateContract.getDivorced();
+
+        vm.warp(block.timestamp + 10 days);
+        initialBalance = loveToken.balanceOf(soulmate1);
+        stakingContract.claimRewards();
+
+        // Compare balances
+        console2.log("initialBalance", initialBalance);
+        console2.log("balance", loveToken.balanceOf(soulmate1));
+    }
+
     /*function testClaimRewardsEveryDay() public {
 
         _mintOneTokenForBothSoulmates();

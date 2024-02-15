@@ -14,6 +14,7 @@ contract Staking {
     error Staking__NoMoreRewards();
     error Staking__StakingPeriodTooShort();
     error Staking__NoSoulmate();
+    error Staking__CoupleIsDivorced();
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
@@ -70,6 +71,7 @@ contract Staking {
     /// @notice Users can claim 1 token per staking token per week.
     function claimRewards() public {
         if (soulmateContract.soulmateOf(msg.sender) == address(0)) revert Staking__NoSoulmate();
+        if (soulmateContract.isDivorced(msg.sender)) revert Staking__CoupleIsDivorced();
 
         uint256 soulmateId = soulmateContract.ownerToId(msg.sender);
         // first claim
