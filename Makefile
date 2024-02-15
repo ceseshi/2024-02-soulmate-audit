@@ -39,3 +39,4 @@ slither :; slither . --config-file slither.config.json
 
 aderyn :; aderyn .
 
+pdf :; pandoc ./audit-data/report.md -o ./audit-data/report.pdf --from markdown --template=./audit-data/eisvogel --listings
